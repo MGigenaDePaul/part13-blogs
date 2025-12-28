@@ -24,10 +24,14 @@ User.init({
       notEmpty: true
     }
   },
+  disabled: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  }
 }, {
   sequelize,
   underscored: true,
-  timestamps: true, 
+  timestamps: true,
   modelName: 'user'
 })
 
