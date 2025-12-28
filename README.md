@@ -212,18 +212,6 @@ npm start
 - Protected routes requiring authentication
 - Authorization checks (users can only delete their own blogs)
 
-## Error Handling
-
-All errors are handled by centralized error middleware that returns appropriate HTTP status codes and error messages.
-
-## Environment Variables
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `DATABASE_URL` | PostgreSQL connection string | - |
-| `PORT` | Server port | 3001 |
-| `SECRET` | JWT secret key | - |
-
 ## Docker Support
 
 To restart the PostgreSQL container after system reboot:
