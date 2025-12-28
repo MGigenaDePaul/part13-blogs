@@ -26,7 +26,8 @@ router.get('/', async (req, res) => {
 
 router.post('/', tokenExtractor, async (req, res, next) => {
   try {
-    const blog = await Blog.create(req.body)
+    const user = await User.findByPk(req.decodedToken.id)
+    const blog = await Blog.create({ ...req.body, userId: user.id })
     res.json(blog)
   } catch(error) {
     next(error)
@@ -42,12 +43,23 @@ router.get('/:id', async (req, res) => {
   }
 })
 
-router.delete('/:id', async (req, res) => {
-  const blog = await Blog.findByPk(req.params.id)
-  if (blog) {
+router.delete('/:id', tokenExtractor, async (req, res, next) => {
+  try {
+    const blog = await Blog.findByPk(req.params.id)
+    
+    if (!blog) {
+      return res.status(404).json({ error: 'blog not found' })
+    }
+
+    if (blog.userId !== req.decodedToken.id) {
+      return res.status(403).json({ error: 'only the creator of this blog can delete it' })
+    }
+
     await blog.destroy()
+    res.status(204).end()
+  } catch(error) {
+    next(error)
   }
-  res.status(204).end()
 })
 
 router.put('/:id', async (req, res, next) => {
